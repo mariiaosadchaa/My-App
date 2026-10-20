@@ -1,21 +1,25 @@
-package app;
+import java.math.BigDecimal;
+import java.math.RoundingMode;
+import java.util.Scanner;
+
 public class Main {
     public static void main(String[] args) {
-        String product = "smartphone";
-        double total = 12153.41;
-        int days = 5;
+        Scanner scanner = new Scanner(System.in);
 
-        System.out.printf("Product No 1: %s,%n", product);
-        System.out.printf("total sales for %d days is EUR %.2f,%n", days, total);
-        System.out.printf("sales by day is EUR %.2f.%n", total / days);
+        System.out.print("Введіть суму доходу: ");
+        BigDecimal income = new BigDecimal(scanner.nextLine().trim().replace(",", "."));
 
-        product = "laptop";
-        total = 10486.85;
-        days = 7;
+        BigDecimal rate;
 
-        System.out.printf("Product No 2: %s,%n", product);
-        System.out.printf("total sales for %d days is EUR %.2f,%n", days, total);
-        System.out.printf("sales by day is EUR %.2f.%n", total / days);
+        if (income.compareTo(new BigDecimal("10000")) <= 0) {
+            rate = new BigDecimal("0.025");
+        } else if (income.compareTo(new BigDecimal("25000")) <= 0) {
+            rate = new BigDecimal("0.043");
+        } else {
+            rate = new BigDecimal("0.067");
+        }
 
+        BigDecimal tax = income.multiply(rate).setScale(2, RoundingMode.HALF_UP);
+        System.out.println("Сума податку: " + tax);
     }
 }
