@@ -1,69 +1,53 @@
 package app;
 
-import java.math.BigDecimal;
-import java.math.RoundingMode;
-import java.sql.SQLOutput;
-import java.util.Scanner;
 import java.util.Arrays;
 import java.util.Random;
+import java.util.Scanner;
 
 public class Main {
     public static void main(String[] args) {
-        int[] arr = new int[20];
-        Random rand = new Random();
+        int[] numbers = new int[15];
 
-        for (int i = 0; i < arr.length; i++) {
-            arr[i] = rand.nextInt(201) - 100;
+        Random random = new Random();
+        for (int i = 0; i < numbers.length; i++) {
+            numbers[i] = random.nextInt(100) + 1;
         }
 
-        System.out.println("Елементи масиву: " + Arrays.toString(arr));
+        System.out.println("Початковий вигляд масиву: " + Arrays.toString(numbers));
+        for (int i = 1; i < numbers.length; i++) {
+            int key = numbers[i];
+            int j = i - 1;
 
-        int negSum = 0;
-        int even = 0;
-        int odd = 0;
-        int minIdx = 0;
-        int maxIdx = 0;
-        int firstNeg = -1;
-
-        for (int i = 0; i < arr.length; i++) {
-            if (arr[i] < 0) {
-                negSum += arr[i];
-                if (firstNeg == -1) {
-                    firstNeg = i;
-                }
+            while (j >= 0 && numbers[j] > key) {
+                numbers[j + 1] = numbers[j];
+                j--;
             }
-            if (arr[i] % 2 == 0) {
-                even++;
+            numbers[j + 1] = key;
+        }
+        System.out.println("Відсортований масив: " + Arrays.toString(numbers));
+        Scanner sc = new Scanner(System.in);
+        System.out.print("Введіть число для пошуку: ");
+
+        int target = sc.nextInt();
+        int left = 0;
+        int right = numbers.length - 1;
+        int foundIndex = -1;
+
+        while (left <= right) {
+            int middle = (left + right) / 2;
+            if (numbers[middle] == target) {
+                foundIndex = middle;
+                break;
+            } else if (numbers[middle] < target) {
+                left = middle + 1;
             } else {
-                odd++;
-            }
-            if (arr[i] < arr[minIdx]) {
-                minIdx = i;
-            }
-            if (arr[i] > arr[maxIdx]) {
-                maxIdx = i;
+                right = middle - 1;
             }
         }
-
-        System.out.println("Сума від'ємних чисел: " + negSum);
-        System.out.println("Кількість парних чисел: " + even);
-        System.out.println("Кількість непарних чисел: " + odd);
-        System.out.println("Найменший елемент: " + arr[minIdx] + " (з індексом " + minIdx + ")");
-        System.out.println("Найбільший елемент: " + arr[maxIdx] + " (з індексом " + maxIdx + ")");
-
-        if (firstNeg == -1) {
-            System.out.println("Від'ємних чисел у масиві немає");
-        } else if (firstNeg == arr.length - 1) {
-            System.out.println("Після першого від'ємного числа немає елементів");
+        if (foundIndex != -1) {
+            System.out.println("Індекс числа " + target + " у відсортованому масиві: " + foundIndex);
         } else {
-            int sum = 0;
-            int count = 0;
-            for (int i = firstNeg + 1; i < arr.length; i++) {
-                sum += arr[i];
-                count++;
-            }
-            double avg = (double) sum / count;
-            System.out.printf("Середнє арифметичне чисел після першого від'ємного числа: %.2f%n", avg);
+            System.out.println("Числа " + target + " немає в масиві.");
         }
     }
 }
