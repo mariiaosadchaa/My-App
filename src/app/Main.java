@@ -1,3 +1,5 @@
+package app;
+
 interface Shape {
     double getArea();
 }
